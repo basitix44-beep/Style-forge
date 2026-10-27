@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StyleForge Studio - Visual Web Developer</title>
+    <!-- Pro Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@600;700;800;900&family=Outfit:wght@500;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@500;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #030712;
+            --panel-bg: rgba(15, 23, 42, 0.95);
+            --panel-solid: #0f172a;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(56, 189, 248, 0.4);
+            --accent-primary: #38bdf8;
+            --accent-secondary: #818cf8;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --radius-ui: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(at 15% 15%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 85% 85%, rgba(129, 140, 248, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(192, 132, 252, 0.08) 0px, transparent 60%);
+        }
+
+        /* INTRO LOADER ANIMATION SCREEN */
+        #introLoader {
+            position: fixed;
+            inset: 0;
+            background: #030712;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
+
+        .intro-logo-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+
+        .intro-brand-title {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        .intro-brand-sub {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 4px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            margin-bottom: 12px;
+        }
+
+        .intro-creator-tag {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #c084fc;
+            letter-spacing: 0.08em;
+            background: rgba(192, 132, 252, 0.1);
+            padding: 4px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(192, 132, 252, 0.25);
+        }
+
+        .intro-spinner {
+            width: 42px;
+            height: 42px;
+            border: 3px solid rgba(56, 189, 248, 0.15);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            margin-top: 35px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulseGlow { 0%, 100% { filter: drop-shadow(0 0 15px rgba(56,189,248,0.3)); } 50% { filter: drop-shadow(0 0 35px rgba(129,140,248,0.6)); } }
+
+        /* TOP HEADER BAR */
+        .top-header {
+            height: 60px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 50;
+            white-space: nowrap;
+            gap: 10px;
+            overflow-x: auto;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .app-subtitle {
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: rgba(56, 189, 248, 0.1);
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+
+        .creator-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #c084fc;
+            background: rgba(192, 132, 252, 0.12);
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(192, 132, 252, 0.25);
+        }
+
+        .header-center-tools {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .viewport-selector {
+            display: flex;
+            background: rgba(3, 7, 18, 0.7);
+            padding: 3px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            gap: 4px;
+        }
+
+        .viewport-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .viewport-btn.active { background: var(--panel-solid); color: var(--accent-primary); border: 1px solid var(--border-glow); }
+
+        .header-actions {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0284c7, var(--accent-primary));
+            color: #030712;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.35);
+        }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5); }
+
+        .btn-secondary {
+            background: rgba(31, 41, 55, 0.8);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover { background: rgba(55, 65, 81, 0.9); border-color: var(--border-glow); }
+
+        .btn-preview {
+            background: rgba(16, 185, 129, 0.18);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+        }
+        .btn-preview:hover { background: rgba(16, 185, 129, 0.3); }
+
+        .btn-danger {
+            background: rgba(225, 29, 72, 0.15);
+            color: #fb7185;
+            border: 1px solid rgba(225, 29, 72, 0.3);
+        }
+        .btn-danger:hover { background: rgba(225, 29, 72, 0.3); }
+
+        /* SUB-HEADER FOR PAGES & FILE OPERATIONS */
+        .sub-header {
+            height: 38px;
+            background: rgba(11, 15, 25, 0.9);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            z-index: 45;
+        }
+
+        .pages-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .page-tab {
+            padding: 3px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(31, 41, 55, 0.4);
+            border: 1px solid var(--border-color);
+        }
+
+        .page-tab.active {
+            background: var(--accent-primary);
+            color: #030712;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(56,189,248,0.3);
+        }
+
+        /* WORKSPACE & SIDEBAR */
+        .workspace {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 98px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 370px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 14px;
+            z-index: 40;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            background: rgba(3, 7, 18, 0.8);
+            border-radius: 8px;
+            padding: 3px;
+            gap: 4px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .sidebar-tab-btn {
+            flex: 1;
+            padding: 6px 0;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .sidebar-tab-btn.active {
+            background: var(--accent-primary);
+            color: #030712;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .tool-section { margin-bottom: 14px; }
+
+        .section-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .shapes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            max-height: 260px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .shape-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .shape-card:hover { border-color: var(--accent-primary); background: rgba(56, 189, 248, 0.12); transform: translateY(-2px); }
+        .shape-card i { font-size: 1.1rem; color: var(--accent-primary); }
+        .shape-card span { font-size: 0.68rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+
+        .action-btns-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+        .action-card {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+        .action-card:hover { border-color: var(--accent-primary); background: rgba(56, 189, 248, 0.1); }
+
+        .prop-card {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-ui);
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .prop-group { margin-bottom: 8px; }
+        .prop-group:last-child { margin-bottom: 0; }
+
+        .prop-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .prop-group input[type="text"],
+        .prop-group input[type="number"],
+        .prop-group select {
+            width: 100%;
+            padding: 6px 10px;
+            background: #030712;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            outline: none;
+        }
+
+        .prop-group input[type="color"] {
+            width: 100%;
+            height: 34px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .file-upload-btn {
+            width: 100%;
+            padding: 7px;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px dashed var(--accent-primary);
+            color: var(--accent-primary);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* CANVAS STAGE */
+        .canvas-stage {
+            flex: 1;
+            background: #030712;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px;
+            overflow: auto;
+            position: relative;
+        }
+
+        .web-canvas {
+            width: 980px;
+            flex: 0 0 auto;
+            box-sizing: border-box;
+            min-width: 0;
+            min-height: 720px;
+            background-color: #0f172a;
+            border: 3px solid #38bdf8;
+            border-radius: 16px;
+            box-shadow: 0 0 50px rgba(56, 189, 248, 0.35), 0 30px 80px -20px rgba(0, 0, 0, 0.9);
+            position: relative;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            animation: canvasFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            margin: auto;
+        }
+
+        @keyframes canvasFadeIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .canvas-header-decor {
+            height: 34px;
+            background: rgba(3, 7, 18, 0.95);
+            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 8px;
+            z-index: 5;
+            position: relative;
+        }
+
+        .dot { width: 11px; height: 11px; border-radius: 50%; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4); }
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .canvas-url-bar {
+            margin-left: 12px;
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.06);
+            padding: 3px 16px;
+            border-radius: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .tex-genz-waves { background-image: radial-gradient(circle at 20% 20%, rgba(56,189,248,0.35) 0px, transparent 45%), radial-gradient(circle at 80% 80%, rgba(192,132,252,0.35) 0px, transparent 45%), radial-gradient(circle at 50% 50%, rgba(244,63,94,0.25) 0px, transparent 65%); background-color: #0f172a; }
+        .tex-blueprint { background-image: linear-gradient(rgba(56,189,248,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.25) 1px, transparent 1px); background-size: 24px 24px; background-color: #0b1329; }
+        .tex-dots { background-image: radial-gradient(rgba(255,255,255,0.3) 1.8px, transparent 1.8px); background-size: 20px 20px; background-color: #030712; }
+        .tex-carbon { background-image: radial-gradient(rgba(255,255,255,0.18) 15%, transparent 16%), radial-gradient(rgba(255,255,255,0.18) 15%, transparent 16%); background-size: 18px 18px; background-position: 0 0, 9px 9px; background-color: #111827; }
+        .tex-synthwave { background-image: linear-gradient(0deg, rgba(244,63,94,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(129,140,248,0.25) 1px, transparent 1px); background-size: 32px 32px; background-color: #090514; }
+        .tex-noise { background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 0); background-size: 6px 6px; background-color: #0f172a; }
+
+        .canvas-el {
+            position: absolute;
+            cursor: move;
+            user-select: none;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            word-break: break-word;
+            padding: 4px;
+            z-index: 10;
+        }
+
+        .canvas-el.selected {
+            outline: 2px dashed #38bdf8 !important;
+            outline-offset: 2px;
+        }
+
+        .canvas-el.is-locked { pointer-events: none !important; opacity: 0.8; }
+        .canvas-el.is-hidden { display: none !important; }
+
+        /* Resize Handles */
+        .resize-handle {
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            background: #38bdf8;
+            border: 2px solid #ffffff;
+            border-radius: 3px;
+            display: none;
+            z-index: 100;
+        }
+
+        .canvas-el.selected .resize-handle { display: block; }
+
+        .handle-nw { top: -6px; left: -6px; cursor: nwse-resize; }
+        .handle-n  { top: -6px; left: calc(50% - 5px); cursor: ns-resize; }
+        .handle-ne { top: -6px; right: -6px; cursor: nesw-resize; }
+        .handle-e  { top: calc(50% - 5px); right: -6px; cursor: ew-resize; }
+        .handle-se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+        .handle-s  { bottom: -6px; left: calc(50% - 5px); cursor: ns-resize; }
+        .handle-sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+        .handle-w  { top: calc(50% - 5px); left: -6px; cursor: ew-resize; }
+
+        /* LAYER TREE PANEL */
+        .layers-drawer {
+            width: 240px;
+            background: var(--panel-bg);
+            border-left: 1px solid var(--border-color);
+            padding: 12px;
+            overflow-y: auto;
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .layer-item {
+            background: rgba(31, 41, 55, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 6px 8px;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .layer-item.selected {
+            border-color: var(--accent-primary);
+            background: rgba(56, 189, 248, 0.15);
+        }
+
+        /* Modal Overlays */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 7, 18, 0.88);
+            backdrop-filter: blur(16px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            width: 100%;
+            max-width: 92vw;
+            height: 92vh;
+            background: #0b0f19;
+            border: 1px solid var(--border-glow);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 12px 18px;
+            background: #111827;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            flex: 1;
+            padding: 0;
+            overflow: auto;
+            background: #030712;
+            display: flex;
+            justify-content: center;
+        }
+
+        pre code { font-family: 'JetBrains Mono', monospace; color: var(--accent-primary); font-size: 0.82rem; line-height: 1.5; }
+
+        @media (max-width: 768px) {
+            .sidebar { position: absolute; left: 0; top: 0; bottom: 0; width: 320px; transform: translateX(-100%); }
+            .sidebar.mobile-open { transform: translateX(0); }
+            .layers-drawer { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INTRO LOADER ANIMATION SCREEN -->
+    <div id="introLoader">
+        <div class="intro-logo-wrap">
+            <div class="intro-brand-title">StyleForge Studio</div>
+            <div class="intro-brand-sub">Visual Web Developer</div>
+            <div class="intro-creator-tag">Created by AXPEX (Abdul Basit)</div>
+        </div>
+        <div class="intro-spinner"></div>
+    </div>
+
+    <!-- TOP HEADER BAR -->
+    <header class="top-header">
+        <div class="brand-container">
+            <span class="app-title">StyleForge Studio</span>
+            <span class="app-subtitle">VISUAL WEB DEVELOPER</span>
+            <span class="creator-badge">Created by AXPEX (Abdul Basit)</span>
+        </div>
+
+        <div class="header-center-tools">
+            <div class="viewport-selector">
+                <button class="viewport-btn active" id="vpDesktop" onclick="setViewport('980px', 'vpDesktop')"><i class="fa-solid fa-desktop"></i> Desktop</button>
+                <button class="viewport-btn" id="vpTablet" onclick="setViewport('768px', 'vpTablet')"><i class="fa-solid fa-tablet-screen-button"></i> Tablet</button>
+                <button class="viewport-btn" id="vpMobile" onclick="setViewport('380px', 'vpMobile')"><i class="fa-solid fa-mobile-screen"></i> Mobile</button>
+            </div>
+
+            <button class="btn btn-secondary" title="Undo (Ctrl+Z)" onclick="undo()"><i class="fa-solid fa-rotate-left"></i></button>
+            <button class="btn btn-secondary" title="Redo" onclick="redo()"><i class="fa-solid fa-rotate-right"></i></button>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="toggleLayersDrawer()"><i class="fa-solid fa-layer-group"></i> Layers</button>
+            <button id="previewBtn" class="btn btn-preview" onclick="openPreviewModal()"><i class="fa-solid fa-eye"></i> Live Preview</button>
+            <button id="exportWebBtn" class="btn btn-primary" onclick="exportFullWebsite()"><i class="fa-solid fa-download"></i> Export Site</button>
+        </div>
+    </header>
+
+    <!-- SUB-HEADER FOR PAGES & FILE OPERATIONS -->
+    <div class="sub-header">
+        <div class="pages-bar" id="pagesBar">
+            <span style="font-size:0.68rem; color:var(--text-muted); font-weight:700; padding:0 2px;">PAGES:</span>
+            <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.68rem;" onclick="addNewPage()"><i class="fa-solid fa-plus"></i> Add Page</button>
+        </div>
+
+        <div style="display:flex; gap:6px;">
+            <button class="btn btn-secondary" style="padding:3px 8px; font-size:0.68rem;" onclick="exportProjectFile()"><i class="fa-solid fa-floppy-disk"></i> Save Project</button>
+            <input type="file" id="importProjectInput" accept=".styleforge, .json" style="display:none;" onchange="importProjectFile(event)">
+            <button class="btn btn-secondary" style="padding:3px 8px; font-size:0.68rem;" onclick="document.getElementById('importProjectInput').click()"><i class="fa-solid fa-folder-open"></i> Open JSON</button>
+            <button id="openCodeModalBtn" class="btn btn-secondary" style="padding:3px 8px; font-size:0.68rem;"><i class="fa-solid fa-code"></i> Inspect Code</button>
+            <button id="resetCanvasBtn" class="btn btn-danger" style="padding:3px 8px; font-size:0.68rem;"><i class="fa-solid fa-trash-can"></i> Clear Canvas</button>
+        </div>
+    </div>
+
+    <!-- WORKSPACE -->
+    <div class="workspace">
+        
+        <aside class="sidebar" id="mainSidebar">
+            <!-- SIDEBAR TAB SWITCHER -->
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab-btn active" onclick="switchSidebarTab('tabComponents', this)">Components</button>
+                <button class="sidebar-tab-btn" onclick="switchSidebarTab('tabShapes', this)">Shapes</button>
+                <button class="sidebar-tab-btn" onclick="switchSidebarTab('tabPresets', this)">Presets</button>
+                <button class="sidebar-tab-btn" onclick="switchSidebarTab('tabInspector', this)">Inspector</button>
+            </div>
+
+            <!-- TAB 1: COMPONENTS -->
+            <div id="tabComponents" class="tab-content active">
+                <div class="tool-section">
+                    <div class="section-title"><i class="fa-solid fa-font"></i> Typography & Text Blocks</div>
+                    <div style="display:flex; gap:8px; margin-bottom: 6px;">
+                        <button class="btn btn-primary" style="flex:1; padding:10px; font-size:0.8rem;" onclick="addText('heading')"><i class="fa-solid fa-heading"></i> Big Headline</button>
+                        <button class="btn btn-secondary" style="flex:1; padding:10px; font-size:0.8rem;" onclick="addText('paragraph')"><i class="fa-solid fa-paragraph"></i> Paragraph</button>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <div class="section-title"><i class="fa-solid fa-bolt"></i> Action Buttons</div>
+                    <div class="action-btns-grid">
+                        <div class="action-card" onclick="addActionButton('whatsapp')"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i> WhatsApp Order</div>
+                        <div class="action-card" onclick="addActionButton('instagram')"><i class="fa-brands fa-instagram" style="color:#e1306c"></i> Instagram Profile</div>
+                        <div class="action-card" onclick="addActionButton('facebook')"><i class="fa-brands fa-facebook" style="color:#1877f2"></i> Facebook Page</div>
+                        <div class="action-card" onclick="addActionButton('cart')"><i class="fa-solid fa-cart-shopping" style="color:#38bdf8"></i> Add To Cart</div>
+                        <div class="action-card" onclick="addActionButton('youtube')"><i class="fa-brands fa-youtube" style="color:#ff0000"></i> YouTube Link</div>
+                        <div class="action-card" onclick="addActionButton('phone')"><i class="fa-solid fa-phone" style="color:#22c55e"></i> Call Direct</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: SHAPES -->
+            <div id="tabShapes" class="tab-content">
+                <div class="tool-section">
+                    <div class="section-title"><i class="fa-solid fa-shapes"></i> Shapes & Mask Containers</div>
+                    <div class="shapes-grid" id="shapesGrid"></div>
+                </div>
+            </div>
+
+            <!-- TAB 3: PRESETS & BACKGROUND -->
+            <div id="tabPresets" class="tab-content">
+                <div class="tool-section">
+                    <div class="section-title"><i class="fa-solid fa-expand"></i> Background, Image Upload & Textures</div>
+                    <div class="prop-card">
+                        <div class="prop-group">
+                            <label>Upload Custom Background from PC</label>
+                            <input type="file" id="canvasBgImgUpload" accept="image/*" style="display:none;" onchange="uploadCanvasBg(event)">
+                            <button class="file-upload-btn" onclick="document.getElementById('canvasBgImgUpload').click()"><i class="fa-solid fa-upload"></i> Choose Background Image</button>
+                        </div>
+                        <div class="prop-group" style="margin-top:6px;">
+                            <label>Or Background Image URL</label>
+                            <input type="text" id="canvasBgUrlInput" placeholder="https://example.com/bg.jpg">
+                        </div>
+                        <div class="prop-group">
+                            <label>Custom Background Color</label>
+                            <input type="color" id="canvasBgPicker" value="#0f172a">
+                        </div>
+                        <div class="prop-group">
+                            <label>Gen-Z Cool Textures & FX</label>
+                            <select id="canvasTextureSelect">
+                                <option value="none">Clean Solid Background</option>
+                                <option value="tex-genz-waves">Gen-Z Holographic Waves</option>
+                                <option value="tex-blueprint">Cyber Blueprint Grid</option>
+                                <option value="tex-dots">Minimal Dot Matrix</option>
+                                <option value="tex-carbon">Dark Carbon Fiber Mesh</option>
+                                <option value="tex-synthwave">Retro Synthwave Grid</option>
+                                <option value="tex-noise">Glassmorphic Grain</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tool-section">
+                    <div class="section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Full Page Starter Samples</div>
+                    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;">
+                        <button class="btn btn-primary" style="padding:8px 4px; font-size:0.72rem; justify-content:center;" onclick="loadSample('cloth')">🛍️ Home</button>
+                        <button class="btn btn-secondary" style="padding:8px 4px; font-size:0.72rem; justify-content:center;" onclick="loadSample('bakery')">🧁 About</button>
+                        <button class="btn btn-secondary" style="padding:8px 4px; font-size:0.72rem; justify-content:center;" onclick="loadSample('agency')">⚡ Services</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: INSPECTOR -->
+            <div id="tabInspector" class="tab-content">
+                <div class="tool-section">
+                    <div class="section-title"><i class="fa-solid fa-sliders"></i> Property Inspector</div>
+                    <div id="inspectorPanel">
+                        <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; padding:10px;">Select any element on canvas to edit boundaries, text, crop size, neon glow, or animations.</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CANVAS STAGE -->
+        <main class="canvas-stage">
+            <div id="webCanvas" class="web-canvas">
+                <div class="canvas-header-decor">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                    <div class="canvas-url-bar" id="canvasUrlBar">https://styleforge-studio.web/home</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT LAYERS DRAWER PANEL -->
+        <aside class="layers-drawer" id="layersDrawer">
+            <div class="section-title"><i class="fa-solid fa-layer-group"></i> Layer Tree</div>
+            <div id="layersContainer" style="display:flex; flex-direction:column; gap:6px;"></div>
+        </aside>
+
+    </div>
+
+    <!-- PREVIEW MODAL -->
+    <div id="previewModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span style="font-size:0.88rem; font-weight:700; color:#34d399;"><i class="fa-solid fa-eye"></i> Pixel-Perfect Fullscreen Website Preview</span>
+                <button class="btn btn-danger" onclick="closePreviewModal()"><i class="fa-solid fa-xmark"></i> Close Preview</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="previewIframe" style="width:100%; height:100%; border:none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- CODE INSPECTOR MODAL -->
+    <div id="codeModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span style="font-size:0.88rem; font-weight:700; color:var(--accent-primary);"><i class="fa-solid fa-terminal"></i> Production Source Code</span>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-secondary" onclick="copyCode()"><i class="fa-regular fa-copy"></i> Copy Code</button>
+                    <button class="btn btn-danger" onclick="closeCodeModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 16px; display: block;">
+                <pre><code id="codeViewer">/* Code generated live... */</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('introLoader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.visibility = 'hidden', 600);
+            }, 1800);
+            loadAutoSavedData();
+            fitCanvasToWorkspace();
+        });
+
+        const canvas = document.getElementById('webCanvas');
+        const canvasBgPicker = document.getElementById('canvasBgPicker');
+        const canvasTextureSelect = document.getElementById('canvasTextureSelect');
+        const canvasBgUrlInput = document.getElementById('canvasBgUrlInput');
+        const inspectorPanel = document.getElementById('inspectorPanel');
+        const codeViewer = document.getElementById('codeViewer');
+        const codeModal = document.getElementById('codeModal');
+        const previewModal = document.getElementById('previewModal');
+        const previewIframe = document.getElementById('previewIframe');
+        const shapesGrid = document.getElementById('shapesGrid');
+        const pagesBar = document.getElementById('pagesBar');
+        const layersContainer = document.getElementById('layersContainer');
+
+        // Keep the design canvas at its selected real width; only zoom its editor display.
+        // Production preview/export is generated from the unzoomed design dimensions.
+        function getCanvasScale() {
+            const scale = parseFloat(canvas.style.zoom || '1');
+            return Number.isFinite(scale) && scale > 0 ? scale : 1;
+        }
+        function fitCanvasToWorkspace() {
+            const stage = document.querySelector('.canvas-stage');
+            if (!stage || !canvas) return;
+            const designWidth = parseFloat(canvas.style.width) || 980;
+            const availableWidth = Math.max(220, stage.clientWidth - 60);
+            canvas.style.zoom = String(Math.max(0.25, Math.min(1, availableWidth / designWidth)));
+        }
+        window.addEventListener('resize', fitCanvasToWorkspace);
+
+        let selectedEl = null;
+        let elCount = 0;
+
+        function toggleLayersDrawer() {
+            const drawer = document.getElementById('layersDrawer');
+            drawer.style.display = drawer.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function switchSidebarTab(tabId, btn) {
+            document.querySelectorAll('.sidebar-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function setViewport(widthStr, btnId) {
+            canvas.style.width = widthStr;
+            document.querySelectorAll('.viewport-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(btnId).classList.add('active');
+            pagesData[currentPage].width = widthStr;
+            fitCanvasToWorkspace();
+            saveHistory();
+        }
+
+        let historyStack = [];
+        let historyStep = -1;
+
+        function saveHistory() {
+            historyStack = historyStack.slice(0, historyStep + 1);
+            historyStack.push({
+                canvasHTML: canvas.innerHTML,
+                canvasBg: canvas.style.background || '#0f172a',
+                canvasWidth: canvas.style.width || '980px',
+                canvasClass: canvas.className
+            });
+            historyStep++;
+            renderLayerTree();
+            autoSaveToLocalStorage();
+        }
+
+        function undo() {
+            if (historyStep > 0) {
+                historyStep--;
+                restoreHistory(historyStack[historyStep]);
+            }
+        }
+
+        function redo() {
+            if (historyStep < historyStack.length - 1) {
+                historyStep++;
+                restoreHistory(historyStack[historyStep]);
+            }
+        }
+
+        function restoreHistory(state) {
+            canvas.innerHTML = state.canvasHTML;
+            canvas.style.background = state.canvasBg;
+            canvas.style.width = state.canvasWidth;
+            canvas.className = state.canvasClass || 'web-canvas';
+            fitCanvasToWorkspace();
+            canvas.querySelectorAll('.canvas-el').forEach(el => makeDraggableAndResizable(el));
+            renderLayerTree();
+            updateCode();
+        }
+
+        let pagesData = {
+            'home': { name: 'Home', bg: '#0f172a', width: '980px', html: '' },
+            'about': { name: 'About Us', bg: '#0f172a', width: '980px', html: '' },
+            'services': { name: 'Services', bg: '#030712', width: '980px', html: '' }
+        };
+        let currentPage = 'home';
+
+        function renderPageTabs() {
+            const tabsContainer = pagesBar.querySelectorAll('.page-tab');
+            tabsContainer.forEach(t => t.remove());
+
+            Object.keys(pagesData).forEach(pageKey => {
+                const tab = document.createElement('div');
+                tab.className = `page-tab ${pageKey === currentPage ? 'active' : ''}`;
+                tab.innerHTML = `<i class="fa-regular fa-file"></i> ${pagesData[pageKey].name}`;
+                tab.onclick = () => switchPage(pageKey);
+                pagesBar.insertBefore(tab, pagesBar.lastElementChild);
+            });
+        }
+
+        function switchPage(pageKey) {
+            pagesData[currentPage].html = canvas.innerHTML;
+            pagesData[currentPage].bg = canvas.style.background || '#0f172a';
+            pagesData[currentPage].width = canvas.style.width || '980px';
+            pagesData[currentPage].canvasClass = canvas.className;
+
+            currentPage = pageKey;
+            document.getElementById('canvasUrlBar').innerText = `https://styleforge-studio.web/${pageKey}`;
+            canvas.innerHTML = pagesData[pageKey].html || '<div class="canvas-header-decor"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div><div class="canvas-url-bar">https://styleforge-studio.web/' + pageKey + '</div></div>';
+            canvas.style.background = pagesData[pageKey].bg || '#0f172a';
+            canvas.style.width = pagesData[pageKey].width || '980px';
+            canvas.className = pagesData[pageKey].canvasClass || 'web-canvas';
+
+            canvas.querySelectorAll('.canvas-el').forEach(el => makeDraggableAndResizable(el));
+            renderPageTabs();
+            renderLayerTree();
+            updateCode();
+            saveHistory();
+        }
+
+        function addNewPage() {
+            const pageName = prompt('Enter New Page Name:', 'Portfolio');
+            if (!pageName) return;
+            const pageKey = pageName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            pagesData[pageKey] = { name: pageName, bg: '#0f172a', width: '980px', html: '' };
+            switchPage(pageKey);
+        }
+
+        canvasBgPicker.addEventListener('input', (e) => {
+            canvas.style.background = e.target.value;
+            pagesData[currentPage].bg = e.target.value;
+            saveHistory();
+        });
+
+        canvasTextureSelect.addEventListener('change', (e) => {
+            canvas.className = 'web-canvas ' + (e.target.value !== 'none' ? e.target.value : '');
+            saveHistory();
+        });
+
+        function uploadCanvasBg(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    canvas.style.background = `url('${evt.target.result}') center/cover no-repeat`;
+                    pagesData[currentPage].bg = canvas.style.background;
+                    saveHistory();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        canvasBgUrlInput.addEventListener('input', (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                canvas.style.background = `url('${url}') center/cover no-repeat`;
+                pagesData[currentPage].bg = canvas.style.background;
+                saveHistory();
+            }
+        });
+
+        const shapesBank = [
+            { name: 'Glass Card', icon: 'fa-solid fa-glass-water', radius: '16px', clip: 'none', glass: true },
+            { name: 'Circle Mask', icon: 'fa-regular fa-circle', radius: '50%', clip: 'none' },
+            { name: 'Soft Pill Badge', icon: 'fa-solid fa-capsules', radius: '50px', clip: 'none' },
+            { name: 'Diamond Shape', icon: 'fa-solid fa-gem', radius: '0px', clip: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' },
+            { name: 'Shield Container', icon: 'fa-solid fa-shield-halved', radius: '0px', clip: 'polygon(0% 0%, 100% 0%, 100% 75%, 50% 100%, 0% 75%)' },
+            { name: 'Hexagon Mask', icon: 'fa-solid fa-shapes', radius: '0px', clip: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
+            { name: 'Star Mask', icon: 'fa-solid fa-star', radius: '0px', clip: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' },
+            { name: 'Triangle Polygon', icon: 'fa-solid fa-play', radius: '0px', clip: 'polygon(50% 0%, 0% 100%, 100% 100%)' }
+        ];
+
+        shapesBank.forEach((sData) => {
+            const card = document.createElement('div');
+            card.className = 'shape-card';
+            card.innerHTML = `<i class="${sData.icon}"></i><span>${sData.name}</span>`;
+            card.onclick = () => addShapeFromBank(sData);
+            shapesGrid.appendChild(card);
+        });
+
+        function addShapeFromBank(sData) {
+            elCount++;
+            const el = document.createElement('div');
+            el.className = 'canvas-el';
+            el.id = `el-${elCount}`;
+            el.style.top = '70px';
+            el.style.left = '70px';
+            el.style.width = '200px';
+            el.style.height = '140px';
+            el.style.backgroundColor = '#38bdf8';
+            el.style.borderRadius = sData.radius;
+            el.style.boxShadow = '0 0 25px rgba(56, 189, 248, 0.6)';
+            if (sData.clip !== 'none') el.style.clipPath = sData.clip;
+            if (sData.glass) {
+                el.style.backgroundColor = 'rgba(255,255,255,0.12)';
+                el.style.backdropFilter = 'blur(12px)';
+                el.style.border = '1px solid rgba(255,255,255,0.25)';
+                el.style.boxShadow = '0 0 30px rgba(56,189,248,0.5)';
+            }
+            el.innerText = `${sData.name}`;
+            el.style.color = '#ffffff';
+            el.style.fontSize = '14px';
+            el.style.fontWeight = 'bold';
+
+            addResizeHandles(el);
+            canvas.appendChild(el);
+            makeDraggableAndResizable(el);
+            selectElement(el);
+            updateCode();
+            saveHistory();
+        }
+
+        function addResizeHandles(el) {
+            ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'].forEach(pos => {
+                const h = document.createElement('div');
+                h.className = `resize-handle handle-${pos}`;
+                h.dataset.handle = pos;
+                el.appendChild(h);
+            });
+        }
+
+        function loadSample(type) {
+            canvas.innerHTML = '<div class="canvas-header-decor"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div><div class="canvas-url-bar" id="canvasUrlBar">https://styleforge-studio.web/' + currentPage + '</div></div>';
+            if (type === 'cloth') {
+                switchPage('home');
+                canvas.style.background = '#0f172a';
+                canvas.className = 'web-canvas tex-genz-waves';
+                canvas.innerHTML += `
+                    <div class="canvas-el" style="top: 50px; left: 50px; width: 880px; height: 60px; font-size: 34px; font-weight: 800; color: #ffffff; font-family: 'Outfit', sans-serif; text-shadow: 0 0 20px rgba(56,189,248,0.6);">URBAN LUXURY STREETWEAR 2026</div>
+                    <div class="canvas-el" style="top: 120px; left: 50px; width: 880px; height: 30px; font-size: 15px; color: #94a3b8;">Discover Exclusive Handcrafted Jackets & Premium Urban Apparel Collections</div>
+                    <div class="canvas-el" data-bg-img="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500" style="top: 175px; left: 50px; width: 420px; height: 260px; border-radius: 16px; background-image: url('https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500'); background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(56,189,248,0.3);"></div>
+                    <div class="canvas-el" style="top: 175px; left: 510px; width: 350px; height: 50px; font-size: 20px; font-weight: 700; color: #f43f5e;">🔥 SUMMER JACKETS COLLECTION</div>
+                    <div class="canvas-el" style="top: 235px; left: 510px; width: 350px; height: 75px; font-size: 14px; color: #d1d5db; white-space: normal;">We provide top-tier street fashion made with breathable fabrics and modern cyberpunk cuts.</div>
+                    <div class="canvas-el" data-url="https://wa.me/923001234567?text=Order%20Clothing" style="top: 335px; left: 510px; width: 240px; height: 48px; background-color: #25d366; color: #ffffff; border-radius: 30px; font-weight: 700; cursor: pointer; box-shadow: 0 0 25px rgba(37,211,102,0.6);"><i class="fa-brands fa-whatsapp" style="margin-right:8px;"></i> Instant WhatsApp Order</div>
+                `;
+            } else if (type === 'bakery') {
+                switchPage('about');
+                canvas.style.background = '#18120b';
+                canvas.className = 'web-canvas tex-dots';
+                canvas.innerHTML += `
+                    <div class="canvas-el" style="top: 50px; left: 50px; width: 880px; height: 60px; font-size: 34px; font-weight: 800; color: #f59e0b; font-family: 'Playfair Display', serif; text-shadow: 0 0 20px rgba(245,158,11,0.6);">ABOUT SWEET CRUMBS BAKERY</div>
+                    <div class="canvas-el" style="top: 120px; left: 50px; width: 880px; height: 30px; font-size: 15px; color: #d1d5db;">Delivering the Best Quality Organic Pastries, Custom Birthday Cakes & Cupcakes Daily</div>
+                    <div class="canvas-el" data-bg-img="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500" style="top: 175px; left: 50px; width: 400px; height: 250px; border-radius: 16px; background-image: url('https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500'); background-size: cover; background-position: center; box-shadow: 0 0 30px rgba(245,158,11,0.3);"></div>
+                    <div class="canvas-el" style="top: 175px; left: 480px; width: 380px; height: 110px; font-size: 14px; color: #f3f4f6; white-space: normal; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">We provide 100% pure organic ingredients, zero artificial preservatives, and master-crafted artisanal desserts for all your memorable family celebrations.</div>
+                    <div class="canvas-el" data-url="https://instagram.com" style="top: 315px; left: 480px; width: 260px; height: 48px; background: linear-gradient(135deg, #e1306c, #f56040); color: #ffffff; border-radius: 30px; font-weight: 700; cursor: pointer; box-shadow: 0 0 25px rgba(225,48,108,0.6);"><i class="fa-brands fa-instagram" style="margin-right:8px;"></i> View Cakes Catalog</div>
+                `;
+            } else if (type === 'agency') {
+                switchPage('services');
+                canvas.style.background = '#030712';
+                canvas.className = 'web-canvas tex-blueprint';
+                canvas.innerHTML += `
+                    <div class="canvas-el" style="top: 50px; left: 50px; width: 880px; height: 60px; font-size: 36px; font-weight: 800; color: #38bdf8; font-family: 'Space Grotesk', sans-serif; text-shadow: 0 0 25px rgba(56,189,248,0.7);">AXPEX DIGITAL SERVICES & PRODUCTS</div>
+                    <div class="canvas-el" style="top: 120px; left: 50px; width: 880px; height: 30px; font-size: 15px; color: #9ca3af;">Custom Web Apps, AI Chatbots, Automation Engines & Premium Trousers/Apparel Solutions</div>
+                    <div class="canvas-el" data-bg-img="https://images.unsplash.com/photo-1542272604-787c963535d3?w=500" style="top: 175px; left: 50px; width: 270px; height: 240px; border-radius: 14px; background-image: url('https://images.unsplash.com/photo-1542272604-787c963535d3?w=500'); background-size: cover; background-position: center; border: 1px solid rgba(56,189,248,0.3);"></div>
+                    <div class="canvas-el" style="top: 175px; left: 345px; width: 510px; height: 240px; background: rgba(15,23,42,0.85); border-radius: 14px; border: 1px solid rgba(56,189,248,0.3); padding: 16px; font-size: 14px; color: #e2e8f0; white-space: normal;">⚡ **We Provide Premium Trousers & Full-Stack Digital Solutions:**<br><br>• High-grade cotton & denim trousers manufacturing and wholesale.<br>• Automated n8n workflows & custom AI chatbot integrations.<br>• Responsive full-stack web development for modern businesses.</div>
+                    <div class="canvas-el" data-url="https://wa.me/923001234567" style="top: 435px; left: 345px; width: 230px; height: 48px; background: linear-gradient(135deg, #0284c7, #38bdf8); color: #030712; border-radius: 30px; font-weight: 800; cursor: pointer; box-shadow: 0 0 25px rgba(56,189,248,0.7);"><i class="fa-solid fa-bolt" style="margin-right:8px;"></i> Hire Us Today</div>
+                `;
+            }
+
+            canvas.querySelectorAll('.canvas-el').forEach(el => {
+                addResizeHandles(el);
+                makeDraggableAndResizable(el);
+            });
+            updateCode();
+            saveHistory();
+        }
+
+        function addText(type) {
+            elCount++;
+            const el = document.createElement('div');
+            el.className = 'canvas-el';
+            el.id = `el-${elCount}`;
+            el.style.top = '90px';
+            el.style.left = '80px';
+            el.style.width = '460px';
+            el.style.height = '70px';
+            el.style.backgroundColor = 'transparent';
+            el.style.whiteSpace = 'normal';
+
+            if (type === 'heading') {
+                el.innerText = 'Main Headline Header';
+                el.style.fontSize = '32px';
+                el.style.fontWeight = '800';
+                el.style.color = '#ffffff';
+                el.style.fontFamily = "'Space Grotesk', sans-serif";
+                el.style.textShadow = '0 0 20px rgba(56,189,248,0.5)';
+            } else {
+                el.innerText = 'Write your custom tagline or description here...';
+                el.style.fontSize = '16px';
+                el.style.color = '#9ca3af';
+                el.style.fontFamily = "'Inter', sans-serif";
+            }
+
+            addResizeHandles(el);
+            canvas.appendChild(el);
+            makeDraggableAndResizable(el);
+            selectElement(el);
+            updateCode();
+            saveHistory();
+        }
+
+        function addActionButton(type) {
+            elCount++;
+            const el = document.createElement('div');
+            el.className = 'canvas-el';
+            el.id = `el-${elCount}`;
+            el.style.top = '100px';
+            el.style.left = '100px';
+            el.style.width = '210px';
+            el.style.height = '50px';
+            el.style.borderRadius = '30px';
+            el.style.fontWeight = '700';
+            el.style.cursor = 'pointer';
+
+            if (type === 'whatsapp') {
+                const phone = prompt('Enter WhatsApp Number:', '923001234567');
+                const msg = prompt('Enter Message:', 'Hello, I want to place an order!');
+                el.style.backgroundColor = '#25d366';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 25px rgba(37,211,102,0.6)';
+                el.dataset.url = `https://wa.me/${phone}?text=${encodeURIComponent(msg || '')}`;
+                el.innerHTML = '<i class="fa-brands fa-whatsapp" style="margin-right:8px;"></i> WhatsApp Order';
+            } else if (type === 'instagram') {
+                const url = prompt('Enter Instagram URL:', 'https://instagram.com');
+                el.style.backgroundColor = '#e1306c';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 25px rgba(225,48,108,0.6)';
+                el.dataset.url = url || '#';
+                el.innerHTML = '<i class="fa-brands fa-instagram" style="margin-right:8px;"></i> Instagram';
+            } else if (type === 'facebook') {
+                const url = prompt('Enter Facebook URL:', 'https://facebook.com');
+                el.style.backgroundColor = '#1877f2';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 25px rgba(24,119,242,0.6)';
+                el.dataset.url = url || '#';
+                el.innerHTML = '<i class="fa-brands fa-facebook" style="margin-right:8px;"></i> Facebook';
+            } else if (type === 'cart') {
+                const link = prompt('Enter Checkout URL:', 'https://checkout.com');
+                el.style.backgroundColor = '#0284c7';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 25px rgba(2,132,199,0.6)';
+                el.dataset.url = link || '#';
+                el.innerHTML = '<i class="fa-solid fa-cart-shopping" style="margin-right:8px;"></i> Add To Cart';
+            } else if (type === 'youtube') {
+                const link = prompt('Enter YouTube Channel URL:', 'https://youtube.com');
+                el.style.backgroundColor = '#ff0000';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 25px rgba(255,0,0,0.6)';
+                el.dataset.url = link || '#';
+                el.innerHTML = '<i class="fa-brands fa-youtube" style="margin-right:8px;"></i> YouTube Link';
+            } else {
+                const phone = prompt('Enter Direct Call Phone Number:', '+923001234567');
+                el.style.backgroundColor = '#22c55e';
+                el.style.color = '#ffffff';
+                el.style.boxShadow = '0 0 25px rgba(34,197,94,0.6)';
+                el.dataset.url = `tel:${phone}`;
+                el.innerHTML = '<i class="fa-solid fa-phone" style="margin-right:8px;"></i> Call Direct';
+            }
+
+            addResizeHandles(el);
+            canvas.appendChild(el);
+            makeDraggableAndResizable(el);
+            selectElement(el);
+            updateCode();
+            saveHistory();
+        }
+
+        function renderLayerTree() {
+            layersContainer.innerHTML = '';
+            const elements = canvas.querySelectorAll('.canvas-el');
+            elements.forEach((el, idx) => {
+                const item = document.createElement('div');
+                item.className = `layer-item ${selectedEl === el ? 'selected' : ''}`;
+                const title = el.innerText.substring(0, 14) || `Layer ${idx + 1}`;
+                item.innerHTML = `
+                    <span><i class="fa-regular fa-square" style="color:#38bdf8; margin-right:4px;"></i> ${title}</span>
+                    <div style="display:flex; gap:6px;">
+                        <i class="fa-solid ${el.classList.contains('is-locked') ? 'fa-lock' : 'fa-lock-open'}" onclick="toggleLock('${el.id}', event)"></i>
+                        <i class="fa-solid ${el.classList.contains('is-hidden') ? 'fa-eye-slash' : 'fa-eye'}" onclick="toggleHide('${el.id}', event)"></i>
+                    </div>
+                `;
+                item.onclick = () => selectElement(el);
+                layersContainer.appendChild(item);
+            });
+        }
+
+        function toggleLock(id, e) {
+            e.stopPropagation();
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.toggle('is-locked');
+                renderLayerTree();
+            }
+        }
+
+        function toggleHide(id, e) {
+            e.stopPropagation();
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.toggle('is-hidden');
+                renderLayerTree();
+            }
+        }
+
+        function makeDraggableAndResizable(el) {
+            let isResizing = false;
+
+            const startAction = (e) => {
+                if (el.classList.contains('is-locked')) return;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                if (e.target.classList.contains('resize-handle')) {
+                    isResizing = true;
+                    e.stopPropagation();
+                    const handlePos = e.target.dataset.handle;
+                    let startW = parseInt(document.defaultView.getComputedStyle(el).width, 10);
+                    let startH = parseInt(document.defaultView.getComputedStyle(el).height, 10);
+                    let startX = clientX;
+                    let startY = clientY;
+                    let startLeft = el.offsetLeft;
+                    let startTop = el.offsetTop;
+
+                    const moveHandler = (eEvt) => {
+                        const curX = eEvt.touches ? eEvt.touches[0].clientX : eEvt.clientX;
+                        const curY = eEvt.touches ? eEvt.touches[0].clientY : eEvt.clientY;
+                        const scale = getCanvasScale();
+                        let dx = (curX - startX) / scale;
+                        let dy = (curY - startY) / scale;
+
+                        if (handlePos.includes('e')) el.style.width = Math.max(30, startW + dx) + 'px';
+                        if (handlePos.includes('s')) el.style.height = Math.max(20, startH + dy) + 'px';
+                        if (handlePos.includes('w')) {
+                            let newW = Math.max(30, startW - dx);
+                            el.style.width = newW + 'px';
+                            el.style.left = (startLeft + (startW - newW)) + 'px';
+                        }
+                        if (handlePos.includes('n')) {
+                            let newH = Math.max(20, startH - dy);
+                            el.style.height = newH + 'px';
+                            el.style.top = (startTop + (startH - newH)) + 'px';
+                        }
+                        updateCode();
+                    };
+
+                    const stopHandler = () => {
+                        isResizing = false;
+                        document.removeEventListener('mousemove', moveHandler);
+                        document.removeEventListener('mouseup', stopHandler);
+                        document.removeEventListener('touchmove', moveHandler);
+                        document.removeEventListener('touchend', stopHandler);
+                        saveHistory();
+                    };
+
+                    document.addEventListener('mousemove', moveHandler);
+                    document.addEventListener('mouseup', stopHandler);
+                    document.addEventListener('touchmove', moveHandler);
+                    document.addEventListener('touchend', stopHandler);
+                    return;
+                }
+
+                selectElement(el);
+                let p3 = clientX;
+                let p4 = clientY;
+
+                const moveDrag = (eEvt) => {
+                    if (isResizing) return;
+                    const curX = eEvt.touches ? eEvt.touches[0].clientX : eEvt.clientX;
+                    const curY = eEvt.touches ? eEvt.touches[0].clientY : eEvt.clientY;
+                    const scale = getCanvasScale();
+                    let p1 = (p3 - curX) / scale;
+                    let p2 = (p4 - curY) / scale;
+                    p3 = curX;
+                    p4 = curY;
+                    el.style.top = (el.offsetTop - p2) + "px";
+                    el.style.left = (el.offsetLeft - p1) + "px";
+                    updateCode();
+                };
+
+                const stopDrag = () => {
+                    document.removeEventListener('mousemove', moveDrag);
+                    document.removeEventListener('mouseup', stopDrag);
+                    document.removeEventListener('touchmove', moveDrag);
+                    document.removeEventListener('touchend', stopDrag);
+                    saveHistory();
+                };
+
+                document.addEventListener('mousemove', moveDrag);
+                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('touchmove', moveDrag);
+                document.addEventListener('touchend', stopDrag);
+            };
+
+            el.onmousedown = startAction;
+            el.ontouchstart = startAction;
+        }
+
+        function selectElement(el) {
+            if (selectedEl) selectedEl.classList.remove('selected');
+            selectedEl = el;
+            selectedEl.classList.add('selected');
+            renderLayerTree();
+
+            switchSidebarTab('tabInspector', document.querySelectorAll('.sidebar-tab-btn')[3]);
+
+            inspectorPanel.innerHTML = `
+                <div class="prop-card">
+                    <div class="prop-group">
+                        <label>Upload Computer Image</label>
+                        <input type="file" id="localImgUpload" accept="image/*" style="display:none;">
+                        <button class="file-upload-btn" onclick="document.getElementById('localImgUpload').click()"><i class="fa-solid fa-upload"></i> Choose Computer File</button>
+                    </div>
+                    <div class="prop-group" style="margin-top:6px;">
+                        <label>Or Web Image URL</label>
+                        <input type="text" id="propImgUrl" placeholder="https://example.com/logo.png" value="${selectedEl.dataset.bgImg || ''}">
+                    </div>
+                    <div class="prop-group">
+                        <label>Text Content</label>
+                        <input type="text" id="propTextVal" value="${selectedEl.innerText}">
+                    </div>
+                    <div class="prop-group">
+                        <label>Font Size (px) & Layer Depth</label>
+                        <div style="display:flex; gap:6px;">
+                            <input type="number" id="propFontSize" value="${parseInt(selectedEl.style.fontSize) || 16}">
+                            <button class="btn btn-secondary" onclick="moveLayer('up')">Front</button>
+                            <button class="btn btn-secondary" onclick="moveLayer('down')">Back</button>
+                        </div>
+                    </div>
+                    <div class="prop-group">
+                        <label>Quick Tools</label>
+                        <div style="display:flex; gap:4px;">
+                            <button class="btn btn-secondary" style="flex:1;" onclick="cloneElement()"><i class="fa-regular fa-copy"></i> Duplicate</button>
+                            <button class="btn btn-secondary" style="flex:1;" onclick="alignElement('center')"><i class="fa-solid fa-align-center"></i> Center X</button>
+                        </div>
+                    </div>
+                    <div class="prop-group">
+                        <label>✨ Neon Glow Shadow FX</label>
+                        <select id="propGlowVal">
+                            <option value="none">No Glow</option>
+                            <option value="0 0 20px rgba(56,189,248,0.7)">Cyan Glow</option>
+                            <option value="0 0 25px rgba(244,63,94,0.7)">Pink Neon</option>
+                            <option value="0 0 25px rgba(129,140,248,0.7)">Indigo Aura</option>
+                            <option value="0 0 30px rgba(255,255,255,0.7)">White Diamond</option>
+                        </select>
+                    </div>
+                    <div class="prop-group">
+                        <label>Width & Height (px)</label>
+                        <div style="display:flex; gap:6px;">
+                            <input type="number" id="propWidth" value="${parseInt(selectedEl.style.width) || 200}">
+                            <input type="number" id="propHeight" value="${parseInt(selectedEl.style.height) || 50}">
+                        </div>
+                    </div>
+                    <div class="prop-group">
+                        <label>Text / Background Colors</label>
+                        <div style="display:flex; gap:6px;">
+                            <input type="color" id="propTextColor" value="${rgbToHex(selectedEl.style.color)}">
+                            <input type="color" id="propBgColor" value="${rgbToHex(selectedEl.style.backgroundColor)}">
+                        </div>
+                    </div>
+                    <button class="btn btn-danger" style="width:100%; margin-top:8px;" onclick="deleteSelected()">Remove Element</button>
+                </div>
+            `;
+
+            document.getElementById('localImgUpload').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        selectedEl.style.backgroundImage = `url('${evt.target.result}')`;
+                        selectedEl.dataset.bgImg = evt.target.result;
+                        selectedEl.style.backgroundSize = 'cover';
+                        selectedEl.style.backgroundPosition = 'center';
+                        selectedEl.innerText = '';
+                        updateCode();
+                        saveHistory();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            document.getElementById('propImgUrl').addEventListener('input', (e) => {
+                const url = e.target.value.trim();
+                selectedEl.dataset.bgImg = url;
+                if(url) {
+                    selectedEl.style.backgroundImage = `url('${url}')`;
+                    selectedEl.style.backgroundSize = 'cover';
+                    selectedEl.style.backgroundPosition = 'center';
+                    selectedEl.innerText = '';
+                } else {
+                    selectedEl.style.backgroundImage = 'none';
+                }
+                updateCode();
+                saveHistory();
+            });
+
+            document.getElementById('propTextVal').addEventListener('input', (e) => {
+                if (!selectedEl.querySelector('i') && !selectedEl.style.backgroundImage) selectedEl.innerText = e.target.value;
+                updateCode();
+            });
+            document.getElementById('propFontSize').addEventListener('input', (e) => {
+                selectedEl.style.fontSize = e.target.value + 'px';
+                updateCode();
+            });
+            document.getElementById('propWidth').addEventListener('input', (e) => {
+                selectedEl.style.width = e.target.value + 'px';
+                updateCode();
+            });
+            document.getElementById('propHeight').addEventListener('input', (e) => {
+                selectedEl.style.height = e.target.value + 'px';
+                updateCode();
+            });
+            document.getElementById('propGlowVal').addEventListener('change', (e) => {
+                selectedEl.style.boxShadow = e.target.value;
+                updateCode();
+                saveHistory();
+            });
+            document.getElementById('propTextColor').addEventListener('input', (e) => {
+                selectedEl.style.color = e.target.value;
+                updateCode();
+            });
+            document.getElementById('propBgColor').addEventListener('input', (e) => {
+                selectedEl.style.backgroundColor = e.target.value;
+                updateCode();
+            });
+        }
+
+        function cloneElement() {
+            if (selectedEl) {
+                const clone = selectedEl.cloneNode(true);
+                elCount++;
+                clone.id = `el-${elCount}`;
+                clone.style.top = (selectedEl.offsetTop + 20) + 'px';
+                clone.style.left = (selectedEl.offsetLeft + 20) + 'px';
+                canvas.appendChild(clone);
+                makeDraggableAndResizable(clone);
+                selectElement(clone);
+                updateCode();
+                saveHistory();
+            }
+        }
+
+        function alignElement(type) {
+            if (selectedEl) {
+                if (type === 'center') {
+                    const cW = canvas.offsetWidth;
+                    const eW = selectedEl.offsetWidth;
+                    selectedEl.style.left = (cW / 2 - eW / 2) + 'px';
+                }
+                updateCode();
+                saveHistory();
+            }
+        }
+
+        function moveLayer(dir) {
+            if (selectedEl) {
+                let z = parseInt(selectedEl.style.zIndex) || 1;
+                selectedEl.style.zIndex = dir === 'up' ? z + 1 : Math.max(0, z - 1);
+                updateCode();
+                saveHistory();
+            }
+        }
+
+        function deleteSelected() {
+            if (selectedEl) {
+                selectedEl.remove();
+                selectedEl = null;
+                inspectorPanel.innerHTML = '<p style="font-size:0.75rem; color:var(--text-muted); text-align:center; padding:10px;">Select any element on canvas to edit boundaries, text, crop size, neon glow, or animations.</p>';
+                renderLayerTree();
+                updateCode();
+                saveHistory();
+            }
+        }
+
+        function rgbToHex(rgb) {
+            if (!rgb || rgb === 'transparent') return '#ffffff';
+            let res = rgb.match(/\d+/g);
+            return res ? "#" + ((1 << 24) + (parseInt(res[0]) << 16) + (parseInt(res[1]) << 8) + parseInt(res[2])).toString(16).slice(1) : '#ffffff';
+        }
+
+        function exportProjectFile() {
+            pagesData[currentPage].html = canvas.innerHTML;
+            pagesData[currentPage].bg = canvas.style.background || '#0f172a';
+            const projectObj = { pagesData, currentPage };
+            const blob = new Blob([JSON.stringify(projectObj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'project.styleforge';
+            a.click();
+        }
+
+        function importProjectFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const projectObj = JSON.parse(e.target.result);
+                    if (projectObj.pagesData) {
+                        pagesData = projectObj.pagesData;
+                        switchPage(projectObj.currentPage || 'home');
+                        alert('StyleForge Project File Loaded!');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function autoSaveToLocalStorage() {
+            pagesData[currentPage].html = canvas.innerHTML;
+            pagesData[currentPage].bg = canvas.style.background || '#0f172a';
+            localStorage.setItem('styleforge_autosave', JSON.stringify({ pagesData, currentPage }));
+        }
+
+        function loadAutoSavedData() {
+            const saved = localStorage.getItem('styleforge_autosave');
+            if (saved) {
+                try {
+                    const projectObj = JSON.parse(saved);
+                    if (projectObj.pagesData) {
+                        pagesData = projectObj.pagesData;
+                        switchPage(projectObj.currentPage || 'home');
+                    }
+                } catch(err) {}
+            }
+        }
+
+        function escapeHtmlAttribute(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function saveCurrentPageState() {
+            if (!pagesData[currentPage]) return;
+            pagesData[currentPage].html = canvas.innerHTML;
+            pagesData[currentPage].bg = canvas.style.background || '#0f172a';
+            pagesData[currentPage].width = canvas.style.width || '980px';
+            pagesData[currentPage].canvasClass = canvas.className;
+        }
+
+        function generateProductionCode() {
+            saveCurrentPageState();
+            let fullProjectCode = `<!-- StyleForge Exported Production Website Code -->\n`;
+
+            Object.keys(pagesData).forEach((pKey) => {
+                const page = pagesData[pKey] || {};
+                const pageName = page.name || pKey;
+                const pageWidth = page.width || '980px';
+                const pageBg = escapeHtmlAttribute(page.bg || '#0f172a');
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = page.html || '';
+                tempDiv.querySelectorAll('.resize-handle, .canvas-header-decor').forEach(node => node.remove());
+
+                // Convert editor elements into clean production elements while preserving their
+                // actual inline CSS (including background images, gradients, typography and effects).
+                tempDiv.querySelectorAll('.canvas-el').forEach((el) => {
+                    if (el.classList.contains('is-hidden')) {
+                        el.remove();
+                        return;
+                    }
+                    el.classList.remove('selected', 'is-locked', 'is-hidden');
+                    el.removeAttribute('id');
+                    el.style.position = 'absolute';
+                    el.style.boxSizing = 'border-box';
+                    el.style.cursor = 'default';
+                    el.style.userSelect = 'auto';
+                    el.style.outline = 'none';
+                    el.querySelectorAll('.resize-handle').forEach(node => node.remove());
+
+                    const image = el.dataset.bgImg;
+                    if (image && !el.style.backgroundImage) {
+                        el.style.backgroundImage = `url("${image.replace(/"/g, '%22')}")`;
+                    }
+                    if (image) {
+                        el.style.backgroundSize = el.style.backgroundSize || 'cover';
+                        el.style.backgroundPosition = el.style.backgroundPosition || 'center';
+                    }
+
+                    const destination = el.dataset.url;
+                    if (destination) {
+                        const anchor = document.createElement('a');
+                        anchor.href = destination;
+                        anchor.target = '_blank';
+                        anchor.rel = 'noopener noreferrer';
+                        anchor.style.cssText = el.style.cssText;
+                        anchor.style.display = 'flex';
+                        anchor.style.alignItems = 'center';
+                        anchor.style.justifyContent = 'center';
+                        anchor.style.textDecoration = 'none';
+                        anchor.style.color = el.style.color || 'inherit';
+                        anchor.innerHTML = el.innerHTML;
+                        el.replaceWith(anchor);
+                    } else {
+                        el.style.display = 'flex';
+                        el.style.alignItems = el.style.alignItems || 'center';
+                        el.style.justifyContent = el.style.justifyContent || 'center';
+                    }
+                });
+
+                // Keep the same design width and background as the editor. The page background
+                // is applied to the design canvas itself so uploaded data-URL images survive export.
+                fullProjectCode += `\n<!-- PAGE: ${String(pageName).toUpperCase()} (${pKey}.html) -->\n`;
+                fullProjectCode += `<section id="page-${escapeHtmlAttribute(pKey)}" class="site-page" style="position:relative;width:100%;min-height:100vh;overflow-x:auto;display:flex;justify-content:center;align-items:flex-start;">\n`;
+                fullProjectCode += `  <div class="site-canvas" style="position:relative;flex:0 0 auto;box-sizing:border-box;width:${escapeHtmlAttribute(pageWidth)};min-height:720px;border:3px solid transparent;background:${pageBg};${page.canvasClass && page.canvasClass.includes('tex-') ? '' : ''}">\n`;
+                fullProjectCode += tempDiv.innerHTML + '\n';
+                fullProjectCode += `  </div>\n</section>\n`;
+            });
+            return fullProjectCode;
+        }
+
+        function buildFullHTMLDoc() {
+            return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleForge Exported Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@600;700;800;900&family=Outfit:wght@500;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Poppins:wght@500;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body style="margin:0; padding:0; overflow-x:hidden; background:#030712; font-family:Inter,Arial,sans-serif;">
+
+    ${generateProductionCode()}
+
+</body>
+</html>`;
+        }
+
+        function updateCode() {
+            codeViewer.innerText = generateProductionCode();
+        }
+
+        function openPreviewModal() {
+            previewIframe.srcdoc = buildFullHTMLDoc();
+            previewModal.classList.add('active');
+        }
+        function closePreviewModal() { previewModal.classList.remove('active'); }
+
+        document.getElementById('openCodeModalBtn').addEventListener('click', () => codeModal.classList.add('active'));
+        function closeCodeModal() { codeModal.classList.remove('active'); }
+        function copyCode() {
+            navigator.clipboard.writeText(codeViewer.innerText);
+            alert('Full multi-page production source code copied!');
+        }
+
+        document.getElementById('resetCanvasBtn').addEventListener('click', () => {
+            if (confirm(`Reset current page (${pagesData[currentPage].name})?`)) {
+                canvas.innerHTML = '<div class="canvas-header-decor"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div><div class="canvas-url-bar">https://styleforge-studio.web/' + currentPage + '</div></div>';
+                canvas.className = 'web-canvas';
+                pagesData[currentPage].html = canvas.innerHTML;
+                updateCode();
+                saveHistory();
+            }
+        });
+
+        function exportFullWebsite() {
+            const standaloneFile = buildFullHTMLDoc();
+            const blob = new Blob([standaloneFile], { type: 'text/html' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'index.html';
+            link.click();
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Delete' && selectedEl) deleteSelected();
+            if (e.ctrlKey && e.key === 'z') undo();
+            if (selectedEl && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                let top = selectedEl.offsetTop;
+                let left = selectedEl.offsetLeft;
+                if (e.key === 'ArrowUp') selectedEl.style.top = (top - 2) + 'px';
+                if (e.key === 'ArrowDown') selectedEl.style.top = (top + 2) + 'px';
+                if (e.key === 'ArrowLeft') selectedEl.style.left = (left - 2) + 'px';
+                if (e.key === 'ArrowRight') selectedEl.style.left = (left + 2) + 'px';
+                updateCode();
+            }
+        });
+
+        renderPageTabs();
+        saveHistory();
+        updateCode();
+        requestAnimationFrame(fitCanvasToWorkspace);
+    </script>
+</body>
+</html>
